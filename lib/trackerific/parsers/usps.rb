@@ -19,7 +19,7 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
 
   def events
     tracking_info.fetch('TrackDetail', []).map do |e|
-      Trackerific::Event.new(date(e), description(e), location(e))
+      Trackerific::Event.new(date(e), description(e), location(e)) if date(e)
     end
   end
 
@@ -30,26 +30,30 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
   end
 
   def date(event)
-    months = { "January" => 0, "Feburary" => 1, "March" => 2, "April" => 3, "May" => 4, "June" => 5, "July" => 6, "August" => 7, "September" => 8, "October" => 9, "November" => 10, "December" => 11 }
-    
-    d = event.split(" ")
-    event_hash = Hash[d.map.with_index.to_a]
+    begin
+      months = { "January" => 0, "Feburary" => 1, "March" => 2, "April" => 3, "May" => 4, "June" => 5, "July" => 6, "August" => 7, "September" => 8, "October" => 9, "November" => 10, "December" => 11 }
+      
+      d = event.split(" ")
+      event_hash = Hash[d.map.with_index.to_a]
 
-    month_name = d.find { |element| months[element] }
-    start_value = event_hash[month_name]
+      month_name = d.find { |element| months[element] }
+      start_value = event_hash[month_name]
 
-    if d[start_value + 4].present? # set end of range based on am/pm presence
-      if d[start_value + 4].include?("am") || d[start_value + 4].include?("pm")
+      if d[start_value + 4].present? # set end of range based on am/pm presence
+        if d[start_value + 4].include?("am") || d[start_value + 4].include?("pm")
 
-        end_value = start_value + 4
+          end_value = start_value + 4
+        else
+          end_value = start_value + 2
+        end
       else
         end_value = start_value + 2
       end
-    else
-      end_value = start_value + 2
-    end
 
-    g = DateTime.parse(d[start_value..end_value].join(" "))
+      g = DateTime.parse(d[start_value..end_value].join(" "))
+    rescue
+      false
+    end
   end
 
   def description(event)
