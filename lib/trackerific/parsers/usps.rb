@@ -14,7 +14,7 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
   end
 
   def summary
-    tracking_info['TrackSummary']
+    tracking_info['TrackSummary'].merge!({"test" => 'test_data'})
   end
 
   def events
@@ -32,7 +32,7 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
   def date(event)
     begin
       months = { "January" => 0, "Feburary" => 1, "March" => 2, "April" => 3, "May" => 4, "June" => 5, "July" => 6, "August" => 7, "September" => 8, "October" => 9, "November" => 10, "December" => 11 }
-      
+
       d = event.split(" ")
       event_hash = Hash[d.map.with_index.to_a]
 
