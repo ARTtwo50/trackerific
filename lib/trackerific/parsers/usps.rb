@@ -14,7 +14,7 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
   end
 
   def summary
-    tracking_info['TrackSummary'].merge!({"test" => 'test_data'})
+    tracking_info['TrackSummary'].merge!(tracking_info)
   end
 
   def events
