@@ -18,7 +18,6 @@ class Trackerific::Builders::USPS < Trackerific::Builders::Base::XML.new(
   def add_track_request
     builder.TrackFieldRequest(:USERID => user_id) do |t|
       t.TrackID(:ID => package_id)
-      t.Revision '1'
     end
   end
 end
