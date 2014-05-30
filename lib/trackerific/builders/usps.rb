@@ -16,7 +16,7 @@ class Trackerific::Builders::USPS < Trackerific::Builders::Base::XML.new(
   # Adds the track request and package id to the XML
   # @api private
   def add_track_request
-    builder.TrackRequest(:USERID => user_id) do |t|
+    builder.TrackFieldRequest(:USERID => user_id) do |t|
       t.TrackID(:ID => package_id)
       t.Revision '1'
     end
