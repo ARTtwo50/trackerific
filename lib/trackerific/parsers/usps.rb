@@ -22,9 +22,7 @@ class Trackerific::Parsers::USPS < Trackerific::Parsers::Base
     #   Trackerific::Event.new(date(e), description(e), location(e)) if date(e)
     # end
 
-    tracking_info["TrackDetail"].fetch('TrackDetail', []).map do |e|
-      Trackerific::Event.new(date(e), description(e), location(e)) if date(e)
-    end
+    tracking_info["TrackDetail"]
   end
 
   private
